@@ -1,0 +1,58 @@
+body {
+  display: flex;
+  justify-content: center;
+  background-color: #bbb;
+  font-family: monospace;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.score-board {
+  display: flex;
+  justify-content: space-between;
+  
+  p {
+    margin: 5px 0 10px 0;
+  }
+}
+
+.game-over {
+  display: none;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  p {
+    margin: 10px 0 5px 0;
+  }
+
+  .game-container--game-over & {
+    display: flex;
+  }
+}
+
+.game-over__high-score-label {
+  display: none;
+
+  .game-over--high-score & {
+    display: inline;
+  }
+}
+
+.game-over__play-again-btn {
+  margin-top: 10px;
+  border: none;
+  outline: none;
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  cursor: pointer;
+
+  &:hover, &:focus {
+    color: #fff;
+  }
+}
+
+canvas {
+  border: 3px solid black;
+}
