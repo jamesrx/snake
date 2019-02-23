@@ -16,6 +16,7 @@ class Snake {
 
   addHead(pixel) {
     pixel.color = '#000';
+    pixel.type = pixelTypes.SNAKE;
     this.pixels.push(pixel);
     this.head = pixel;
 
