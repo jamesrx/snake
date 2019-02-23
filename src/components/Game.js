@@ -17,24 +17,26 @@ class Game {
     this.GAME_OVER_CLASS = 'game-container--game-over';
     this.HIGH_SCORE_CLASS = 'game-over--high-score';
 
-    document.querySelector('.game-over__play-again-btn').addEventListener('click', () => this.start());
+    document.querySelector('.game-over__play-again-btn').addEventListener('click', () => {
+      this.board.clearAllPixels();
+      this.start();
+    });
   }
 
   start() {
-    this.containerEl.classList.remove(this.GAME_OVER_CLASS);
-    this.gameOverEl.classList.remove(this.HIGH_SCORE_CLASS);
     this.score = 0;
     this.highScore = localStorage.getItem('highScore') || 0;
-    this.board.pixels = {};
+    this.scoreEl.innerText = this.score;
+    this.highScoreEl.innerText = this.highScore;
+
+    this.containerEl.classList.remove(this.GAME_OVER_CLASS);
+    this.gameOverEl.classList.remove(this.HIGH_SCORE_CLASS);
 
     this.snake = new Snake(this.board.findEmptyPixel());
-    this.board.addPixels(
+    this.board.addPixel(
       new Food(this.board.findEmptyPixel()),
       ...this.snake.pixels,
     );
-    this.board.draw();    
-    this.scoreEl.innerText = this.score;
-    this.highScoreEl.innerText = this.highScore;
 
     this.startAnimation();
   }
@@ -59,24 +61,22 @@ class Game {
 
   updateFrame() {
     if (this.snake.nextDirection) {
-      const nextPixel = this.board.getPixel(this.snake.findMove());
+      const nextMove = this.board.getPixel(this.snake.getNextMove());
 
-      if (this.board.isOutOfBounds(nextPixel) || nextPixel.type === pixelTypes.SNAKE) {
+      if (this.board.isOutOfBounds(nextMove) || nextMove.type === pixelTypes.SNAKE) {
         this.gameOver();
         return false;
       }
 
-      if (nextPixel.type === pixelTypes.FOOD) {
+      if (nextMove.type === pixelTypes.FOOD) {
         this.score += this.point_value;
         this.scoreEl.innerText = this.score;
-        this.board.addPixels(new Food(this.board.findEmptyPixel()));
+        this.board.addPixel(new Food(this.board.findEmptyPixel()));
       } else {
         this.board.clearPixel(this.snake.removeTail());
       }
 
-      this.snake.addHead(nextPixel);
-      this.board.addPixels(...this.snake.pixels);
-      this.board.draw();
+      this.board.addPixel(this.snake.addHead(nextMove));
     }
   }
 

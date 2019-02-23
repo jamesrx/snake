@@ -16,9 +16,14 @@ class Snake {
 
   addHead(pixel) {
     pixel.color = '#000';
-    pixel.type = pixelTypes.SNAKE;
     this.pixels.push(pixel);
     this.head = pixel;
+
+    return this.head;
+  }
+
+  removeTail() {
+    return this.pixels.shift();
   }
 
   setNextDirection(event) {
@@ -28,7 +33,7 @@ class Snake {
     }
   }
 
-  findMove() {
+  getNextMove() {
     if (!(
       this.direction === directions.LEFT && this.nextDirection === directions.RIGHT ||
       this.direction === directions.RIGHT && this.nextDirection === directions.LEFT ||
@@ -59,10 +64,6 @@ class Snake {
     }
 
     return new Pixel(x, y);
-  }
-
-  removeTail() {
-    return this.pixels.shift();
   }
 }
 

@@ -14,22 +14,17 @@ class Board {
     this.ctx = canvas.getContext('2d');
   }
 
-  draw() {
-    this.ctx.fillStyle = '#85ca00';
-    this.ctx.fillRect(0, 0, this.width, this.height);
-
+  clearAllPixels() {
     Object.values(this.pixels).forEach(pixels => {
-      Object.values(pixels).forEach(pixel => {
-        this.ctx.fillStyle = pixel.color;
-        this.ctx.fillRect(pixel.x * this.pixelSize, pixel.y * this.pixelSize, this.pixelSize, this.pixelSize);
-      });
-    })
+      Object.values(pixels).forEach(pixel => this.clearPixel(pixel));
+    });
   }
 
-  addPixels(...pixels) {
+  addPixel(...pixels) {
     pixels.forEach(pixel => {
       this.pixels[pixel.x] = this.pixels[pixel.x] || {};
       this.pixels[pixel.x][pixel.y] = pixel;
+      this.drawPixel(pixel);
     });
   }
 
@@ -57,6 +52,22 @@ class Board {
     if (!Object.keys(this.pixels[pixel.x]).length) {
       delete this.pixels[pixel.x];
     }
+
+    this.ctx.clearRect(...this.getPixelDimensions(pixel));
+  }
+
+  drawPixel(pixel) {
+    this.ctx.fillStyle = pixel.color;
+    this.ctx.fillRect(...this.getPixelDimensions(pixel));
+  }
+
+  getPixelDimensions(pixel) {
+    return [
+      pixel.x * this.pixelSize,
+      pixel.y * this.pixelSize,
+      this.pixelSize,
+      this.pixelSize
+    ];
   }
 
   isOutOfBounds(pixel) {
